@@ -1,0 +1,55 @@
+name: Tests
+
+on:
+  workflow_call:
+    inputs:
+      test-group:
+        type: string
+        required: true
+        description: unit or e2e
+
+jobs:
+  tests:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        php-version: ['8.0', '8.1']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup
+        uses: './.github/actions/ci-setup'
+        with:
+          php-version: ${{ matrix.php-version }}
+          php-extensions: 'openswoole, gd, intl'
+          extensions-cache-key: ${{ inputs.test-group }}-tests-${{ matrix.php-version }}
+      - name: Tests
+        run: composer test:${{ inputs.test-group }}
+      - name: Publish coverage
+        if: ${{ matrix.php-version == '8.1' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-${{ inputs.test-group }}
+          path: |
+            build/coverage-${{ inputs.test-group }}
+
+  mutation-tests:
+    runs-on: ubuntu-22.04
+    needs:
+      - tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup
+        uses: './.github/actions/ci-setup'
+        with:
+          php-version: '8.1'
+          php-extensions: 'openswoole, gd, intl'
+          extensions-cache-key: ${{ inputs.test-group }}-mutation-tests
+      - name: Download coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-${{ inputs.test-group }}
+          path: build
+      - name: ${{ inputs.test-group }} mutation tests
+        run: composer mutation-tests:${{ inputs.test-group }}
