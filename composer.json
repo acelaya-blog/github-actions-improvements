@@ -5,6 +5,11 @@
         "symfony/log": "^2.0 || ^3.0"
     },
     "scripts": {
-        "clean:dev": "rm -f data/database.sqlite && rm -f config/params/generated_config.php"
+        "coding-styles": "echo \"Checking coding styles\"",
+        "static-analysis": "echo \"Running static analysis\"",
+        "test:unit": "echo \"Running unit tests\"",
+        "test:e2e": "echo \"Running E2E tests\"",
+        "mutation-tests:unit": "echo \"Running unit mutation tests\"",
+        "mutation-tests:e2e": "echo \"Running E2E mutation tests\""
     }
 }
