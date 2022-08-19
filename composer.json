@@ -2,7 +2,7 @@
     "name": "acelaya-blog/improving-github-actions",
     "require": {
         "php": "^8.0",
-        "symfony/log": "^2.0 || ^3.0"
+        "psr/log": "^2.0 || ^3.0"
     },
     "scripts": {
         "coding-styles": "echo \"Checking coding styles\"",
