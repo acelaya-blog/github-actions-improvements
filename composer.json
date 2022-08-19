@@ -1,0 +1,10 @@
+{
+    "name": "acelaya-blog/improving-github-actions",
+    "require": {
+        "php": "^8.0",
+        "symfony/log": "^2.0 || ^3.0"
+    },
+    "scripts": {
+        "clean:dev": "rm -f data/database.sqlite && rm -f config/params/generated_config.php"
+    }
+}
